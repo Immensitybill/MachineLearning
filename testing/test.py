@@ -5,7 +5,4 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 import numpy as np
 
-df = pd.read_csv('F:\PyWorkSpace\machine learning\linearRegression\ex1data1.txt', names=['population', 'profit'])
-print(df.head())
-
-tf.train.GradientDescentOptimizer
+print(np.log10(100))

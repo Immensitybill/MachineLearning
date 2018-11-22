@@ -1,10 +1,13 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-dataPath = "F:\PyWorkSpace\machine learning\logisticRegression\ex2data1.txt"
-data = pd.read_csv(dataPath, header=None, names=['Exam 1', 'Exam 2', 'Admitted'])
-
-exam12 = data[['Exam 1','Exam 2']]
+# dataPath = "F:\PyWorkSpace\machine learning\logisticRegression\ex2data1.txt"
+# data = pd.read_csv(dataPath, header=None, names=['Exam 1', 'Exam 2', 'Admitted'])
+#
+# exam12 = data[['Exam 1','Exam 2']]
+# admitted = data['Admitted']
+# m,n = np.shape(exam12)
+# thetas = np.zeros(n)
 
 def sigmoid(z):
     return 1/(1+np.exp(-z))
@@ -13,16 +16,54 @@ def sigmoid(z):
 
 def hypothesis (X,thetas):
     z = np.dot(X,thetas)
-    return sigmoid(z)
+    result = sigmoid(z)
+    return result
 
-m,n = np.shape(exam12)
-thetas = np.zeros(n)
 
-def costFunction(X,Y,thetas):
+# print(hypothesis(exam12,thetas))
 
-   np.sum (-Y*np.log(hypothesis(X,thetas)-(1-Y))*np.log(1-hypothesis(X,thetas)))/X.len()
 
-hypothesis(exam12,thetas)
+def costFunction(thetas,X,Y):
+
+    firstPart = Y*np.log(hypothesis(X,thetas))
+    secondPart = (1-Y)*np.log(1-hypothesis(X,thetas))
+    m = len(X)
+    result = np.sum(firstPart+secondPart)*(-1/m)
+    return result
+
+
+def gradient (thetas,X,Y,):
+    a = hypothesis(X, thetas) - Y
+    gradient = np.dot(X.T, a) / len(X)
+    return gradient
+
+def gradientDescent(X,Y,thetas,alpha,maxIterations):
+    costs = []
+    for i in range(0,maxIterations):
+        print('i: ', i)
+        a = hypothesis(X,thetas)-Y
+        gradient = np.dot(X.T,a)/len(X)
+
+        # gradient =(1 / len(X)) * X.T @ (sigmoid(X @ thetas) - Y)
+        print('gradient: ',gradient)
+        cost = costFunction(X,Y,thetas)
+        costs.append(cost)
+        print('cost: ',cost)
+        print('old thetas: ',thetas)
+        thetas = thetas - alpha*gradient
+        print('new thetas: ', thetas)
+        print('hyposthesis: ', hypothesis(X,thetas))
+
+        # costFunction(X,Y,thetas)
+    xAxis = np.arange(0, maxIterations)
+    plt.plot(xAxis, costs)
+    plt.show()
+    print('final thetas: ',thetas)
+    return thetas
+
+
+# gradientDescent(exam12,admitted,thetas,0.01,400)
+
 
 # x = np.arange(-10,10)
 # y = sigmoid(x)
