@@ -19,7 +19,7 @@ m,n = np.shape(exam12)
 thetas = np.zeros(n)
 
 
-thetas = LogisticGradientDescenter.gradientDescent(exam12,admitted,thetas,0.001,100000)
+thetas = LogisticGradientDescenter.gradientDescent(exam12,admitted,thetas,0.001,100)
 
 positive = data[data['Admitted'].isin([1])]
 negative = data[data['Admitted'].isin([0])]
