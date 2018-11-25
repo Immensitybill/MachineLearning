@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 from logisticRegression import LogisticGradientDescenter
 import scipy.optimize as opt
-dataPath = "F:\PyWorkSpace\machine learning\logisticRegression\ex2data1.txt"
+dataPath = "..\logisticRegression\ex2data1.txt"
 data = pd.read_csv(dataPath, header=None, names=['Exam 1', 'Exam 2', 'Admitted'])
 
 

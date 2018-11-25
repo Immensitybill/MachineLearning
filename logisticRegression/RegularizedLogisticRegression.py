@@ -1,54 +1,37 @@
 import numpy as np
-import pandas as pd
-import scipy.optimize as opt
 
-from logisticRegression import LogisticGradientDescenter
-
-dataPath = "F:\PyWorkSpace\machine learning\logisticRegression\ex2data2.txt"
-data = pd.read_csv(dataPath, header=None, names=['test1', 'test2', 'Admitted'])
-
-test12 = data[['test1','test2']]
+def sigmoid(z):
+    return 1/(1+np.exp(-z))
 
 
 
+def hypothesis(thetas, X):
+    z = np.dot(X,thetas)
+    result = sigmoid(z)
+    return result
+
+def costFunction(thetas,X,Y,lamda):
+
+    firstPart = Y*np.log(hypothesis(thetas, X))
+    secondPart = (1-Y)*np.log(1 - hypothesis(thetas, X))
+    m = len(X)
+
+    regularization = (lamda/(2*m))*np.sum(np.power(thetas,2))
+    result = np.sum(firstPart+secondPart)*(-1/m) + regularization
+    return result
 
 
-def mapFeature(X, degree):
-    degree=degree+1
-    x1 = X['test1']
-    x2 = X['test2']
-    for i in range(0, degree):
-        for j in range (0 , degree-i):
-            X ['F'+ str(i)+str(j)] = np.power(x1,i)*np.power(x2,j)
-    X.drop('test1',axis=1,inplace=True)
-    X.drop('test2',axis=1,inplace=True)
-    return X
+def gradient (thetas,X,Y,lamda):
+    X0 = X['F00']
+    theta0 = thetas[0]
+    a0 = hypothesis(theta0, X0) - Y
+    gradient0 = np.dot(X0.T, a0) / len(X0)
 
 
-X = mapFeature(test12,6)
-Y = data['Admitted']
-m,n = np.shape(X)
-thetas = np.zeros(n)
+    X1 = X.drop(['F00'],axis=1)
+    theta1 = np.delete(thetas,0,axis=0)
+    a1 = hypothesis(theta1,X1)-Y
+    gradient1 = np.dot(X1.T,a1)/len(X1)+lamda/len(X1)*theta1
 
-result = opt.fmin_tnc(func=LogisticGradientDescenter.costFunction, x0=thetas, fprime=LogisticGradientDescenter.gradient, args=(X, Y))
-
-print(result)
-
-hy = LogisticGradientDescenter.hypothesis(result[0],X)
-
-result = []
-for i in hy:
-    if i >= 0.5:
-        result.append(1)
-    else:
-        result.append(0)
-
-sum = 0
-for j in range(0,len(result)):
-    if result[j] == Y[j]:
-        sum = sum+1
-
-print ("correct ratio: ",sum/len(result))
-
-
-
+    result = np.insert(gradient1,0,values=gradient0,axis=0)
+    return result

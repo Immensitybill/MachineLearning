@@ -5,4 +5,8 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 import numpy as np
 
-print(np.log10(100))
+a = pd.DataFrame([[1,2],[2,3],[3,4]])
+
+b = a.drop([0],axis=1)
+
+print(b)
