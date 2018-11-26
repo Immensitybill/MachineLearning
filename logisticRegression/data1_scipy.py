@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-from logisticRegression import LogisticGradientDescenter
+from logisticRegression import LogisticRegression
 import scipy.optimize as opt
 dataPath = "..\logisticRegression\ex2data1.txt"
 data = pd.read_csv(dataPath, header=None, names=['Exam 1', 'Exam 2', 'Admitted'])
@@ -26,7 +26,7 @@ thetas = np.zeros(n)
 # gradient = LogisticGradientDescenter.gradient(exam12,admitted,thetas)
 
 # result = opt.fmin_tnc(func=LogisticGradientDescenter.costFunction, x0=thetas, fprime=LogisticGradientDescenter.gradient, args=(X, Y))
-result1 = opt.minimize(fun=LogisticGradientDescenter.costFunction, x0=thetas, args=(X, Y), method='Newton-CG', jac=LogisticGradientDescenter.gradient)
+result1 = opt.minimize(fun=LogisticRegression.costFunction, x0=thetas, args=(X, Y), method='Newton-CG', jac=LogisticRegression.gradient)
 
 positive = data[data['Admitted'].isin([1])]
 negative = data[data['Admitted'].isin([0])]

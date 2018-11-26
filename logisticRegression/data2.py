@@ -2,8 +2,9 @@ import numpy as np
 import pandas as pd
 import scipy.optimize as opt
 import matplotlib.pyplot as plt
+import seaborn as sns
 
-from logisticRegression import LogisticGradientDescenter, RegularizedLogisticRegression
+from logisticRegression import LogisticRegression, RegularizedLogisticRegression
 
 data = pd.DataFrame()
 test12 = pd.DataFrame()
@@ -31,17 +32,17 @@ def mapFeature(X,degree):
 def run():
     readData()
     degree = 6
-
     X = mapFeature(test12,degree)
     Y = data['Admitted']
     m,n = np.shape(X)
     thetas = np.zeros(n)
-    lamda = 0.2
+    lamda = 1
 
     # cost = RegularizedLogisticRegression.costFunction(thetas,X, Y, 1)
-    g0 = RegularizedLogisticRegression.gradient(thetas,X,Y,1)
+    # g0 = RegularizedLogisticRegression.gradient(thetas,X,Y,lamda)
 
-    result = opt.fmin_tnc(func=RegularizedLogisticRegression.costFunction, x0=thetas, fprime=RegularizedLogisticRegression.gradient, args=(X, Y,lamda))
+    result = opt.fmin_tnc(func=RegularizedLogisticRegression.costFunction, x0=thetas, fprime=RegularizedLogisticRegression.regularized_gradient, args=(X, Y,lamda))
+    # result = opt.fmin_tnc(func=LogisticRegression.costFunction, x0=thetas,fprime=LogisticRegression.gradient, args=(X, Y))
     print(result[0])
 
     x,y = findDescitionBoundary(result[0],degree)

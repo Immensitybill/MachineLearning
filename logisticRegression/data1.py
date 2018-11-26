@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-from logisticRegression import LogisticGradientDescenter
+from logisticRegression import LogisticRegression
 
 dataPath = "..\logisticRegression\ex2data1.txt"
 data = pd.read_csv(dataPath, header=None, names=['Exam 1', 'Exam 2', 'Admitted'])
@@ -19,7 +19,7 @@ m,n = np.shape(exam12)
 thetas = np.zeros(n)
 
 
-thetas = LogisticGradientDescenter.gradientDescent(exam12,admitted,thetas,0.001,200000)
+thetas = LogisticRegression.gradientDescent(exam12, admitted, thetas, 0.001, 200000)
 
 positive = data[data['Admitted'].isin([1])]
 negative = data[data['Admitted'].isin([0])]

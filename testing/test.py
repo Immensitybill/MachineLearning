@@ -5,8 +5,15 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 import numpy as np
 
-a = pd.DataFrame([[1,2],[2,3],[3,4]])
+a = np.array([1,4,7]).T
 
-b = a.drop([0],axis=1)
+aa = a.T
 
-print(b)
+b = np.array([[2,3],[5,6],[8,9]])
+
+c = np.array([2,3,4])
+
+result = np.dot(a.T,c)
+
+print(aa)
+
