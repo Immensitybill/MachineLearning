@@ -8,7 +8,7 @@ from logisticRegression import LogisticRegression, RegularizedLogisticRegression
 
 data = pd.DataFrame()
 test12 = pd.DataFrame()
-
+run()
 def readData():
     dataPath = "..\logisticRegression\ex2data2.txt"
     global data
@@ -36,7 +36,7 @@ def run():
     Y = data['Admitted']
     m,n = np.shape(X)
     thetas = np.zeros(n)
-    lamda = 1
+    lamda = 0.5
 
     # cost = RegularizedLogisticRegression.costFunction(thetas,X, Y, 1)
     # g0 = RegularizedLogisticRegression.gradient(thetas,X,Y,lamda)
@@ -51,8 +51,8 @@ def run():
 
 
 def findDescitionBoundary(theta,degree):
-    t1 = np.linspace(-1,1.5,1000)
-    t2 = np.linspace(-1,1.5,1000)
+    t1 = np.linspace(-1,1.5,100)
+    t2 = np.linspace(-1,1.5,100)
     cordinates = [(x,y) for x in t1 for y in t2]
 
     cordFrame = pd.DataFrame(cordinates)
@@ -63,6 +63,8 @@ def findDescitionBoundary(theta,degree):
 
     inner_product = mappedCordFrame.as_matrix() @ theta
 
+    # np.abs(inner_product) < 2 * 10**-3输出的是一个True or False的列向量
+    # 对mappedCordFrame的每一行应用True or False,Ture就被保留到decision False就被放弃
     decision = mappedCordFrame[np.abs(inner_product) < 2 * 10**-3]
 
     return decision.F10, decision.F01
@@ -80,7 +82,7 @@ def draw_boundary(X,Y):
     plt.grid(True)
     plt.show()
 
-run()
+
 
 # hy = LogisticGradientDescenter.hypothesis(result[0],X)
 #

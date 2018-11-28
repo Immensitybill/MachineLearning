@@ -5,15 +5,26 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 import numpy as np
 
-a = np.array([1,4,7]).T
+aa =np.array([[11,33,44],[22,33,44],[55,66,77]])
 
-aa = a.T
+bb = np.array([[22,33,55],[33,33,44],[66,66,66]])
 
-b = np.array([[2,3],[5,6],[8,9]])
+# aa.columns = ["test1",'test2','test3']
 
-c = np.array([2,3,4])
+# bb = np.ones(aa.shape[1])
+#
+# y = aa @ bb
+# y1 = np.dot(aa,bb)
+print(aa== bb)
 
-result = np.dot(a.T,c)
+cc = [1,2,3,4,5,6,7,8,9,10]
 
-print(aa)
+
+for i in range(1,11):
+    result = [1 if i == c else 0 for c in cc]
+    print(result)
+
+
+
+
 
