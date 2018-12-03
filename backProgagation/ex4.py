@@ -2,6 +2,7 @@
 from scipy.io import loadmat
 import pandas as pd
 import numpy as np
+import scipy.optimize as opt
 
 import scipy.io as sio
 import csv
@@ -30,7 +31,28 @@ def dataProcess(y):
         y_matrix[label-1] = [1 if label == y_i else 0 for y_i in y]
     return y_matrix
 
+def random_init(size):
+    return np.random.uniform(-0.12, 0.12, size)
 
+def nn_training(X, y):
+    """regularized version
+    the architecture is hard coded here... won't generalize
+    """
+    init_theta = random_init(10285)  # 25*401 + 10*26
+
+    res = opt.minimize(fun=neural_network_ex4.costWithRegularization,
+                       x0=init_theta,
+                       args=(X, y, 1),
+                       method='TNC',
+                       jac=neural_network_ex4.computeGradientRegularization,
+                       options={'maxiter': 400})
+    return res
+def show_accuracy(theta, X, y):
+    _, _, _, _, h = neural_network_ex4.feedForward(theta, X)
+
+    y_pred = np.argmax(h, axis=1) + 1
+
+    print(classification_report(y, y_pred))
 
 def run():
     theta1, theta2 = loadTheta()
@@ -38,8 +60,19 @@ def run():
     X_raw,y_raw=loadData()
     X_added_bis = np.insert(X_raw, 0, np.ones(X_raw.shape[0]), axis=1)
     y_processed = dataProcess(y_raw)
-    cost = neural_network_ex4.cost(theta,X_added_bis,y_processed)
-    print(cost)
+    res = nn_training(X_added_bis,y_processed)
+    print(res)
+    final_theta = res.x
+
+    show_accuracy(final_theta,X_added_bis,y_raw)
+
+    # cost = neural_network_ex4.costWithRegularization(theta,X_added_bis,y_processed,r_rate=1)
+    # print(cost)
+
+    # neural_network_ex4.gradient_checking(theta,X_added_bis,y_processed,0.0001,True)
+
+    # neural_network_ex4.computeGradientRegularization(theta,X_added_bis,y_processed)
+
 
     # X = np.insert(X_raw, 0, np.ones(X_raw.shape[0]), axis=1)
     # # y = expand_y(y_raw)
