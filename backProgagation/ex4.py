@@ -45,7 +45,7 @@ def nn_training(X, y):
                        args=(X, y, 1),
                        method='TNC',
                        jac=neural_network_ex4.computeGradientRegularization,
-                       options={'maxiter': 400})
+                       options={'maxiter': 800})
     return res
 def show_accuracy(theta, X, y):
     _, _, _, _, h = neural_network_ex4.feedForward(theta, X)
@@ -54,17 +54,53 @@ def show_accuracy(theta, X, y):
 
     print(classification_report(y, y_pred))
 
+def getTrainingData(X_raw,y_raw):
+    X_training = X_raw[0:250,:]
+    y_training = y_raw[0:250,:]
+    a=500
+    for i in range(1,10):
+        X_training = np.concatenate((X_training,X_raw[a:a+250,:]))
+        y_training = np.concatenate((y_training,y_raw[a:a+250,:]))
+        a=a+500
+    return X_training,y_training
+    # X_training = pd.DataFrame(dtype="float64")
+    # y_training = pd.DataFrame()
+    # a = 0
+    # for i in range(1,11):
+    #     # X_training = pd.concat([X_training,pd.DataFrame(X_raw[a:a+250])])
+    #     X_training = X_training.append(pd.DataFrame(X_raw[a:a+250]),ignore_index=True)
+    #     y_training = y_training.append(pd.DataFrame(y_raw[a:a+250]), ignore_index=True)
+    #     a = a + 500
+    # return X_training,y_training
+        # x10 = X_raw[0:250]
+        # x1 = X_raw[500:750]
+        # x2 = X_raw[1000:1250]
+
+def getPredictionData(X_raw,y_raw):
+    X_predict = X_raw[250:500, :]
+    y_predict = y_raw[250:500, :]
+    a = 750
+    for i in range(1, 10):
+        X_predict = np.concatenate((X_predict, X_raw[a:a + 250, :]))
+        y_predict = np.concatenate((y_predict, y_raw[a:a + 250, :]))
+        a = a + 500
+    return X_predict, y_predict
+
 def run():
     theta1, theta2 = loadTheta()
     theta = neural_network_ex4.serialize(theta1, theta2)
     X_raw,y_raw=loadData()
-    X_added_bis = np.insert(X_raw, 0, np.ones(X_raw.shape[0]), axis=1)
-    y_processed = dataProcess(y_raw)
+    X_training_raw,y_training_raw = getTrainingData(X_raw,y_raw)
+    X_predict_raw,y_predict_raw =getPredictionData(X_raw, y_raw)
+    X_added_bis = np.insert(X_training_raw, 0, np.ones(X_training_raw.shape[0]), axis=1)
+    X_predict_added_bis = np.insert(X_predict_raw, 0, np.ones(X_predict_raw.shape[0]), axis=1)
+
+    y_processed = dataProcess(y_training_raw)
     res = nn_training(X_added_bis,y_processed)
     print(res)
     final_theta = res.x
 
-    show_accuracy(final_theta,X_added_bis,y_raw)
+    show_accuracy(final_theta,X_predict_added_bis,y_predict_raw)
 
     # cost = neural_network_ex4.costWithRegularization(theta,X_added_bis,y_processed,r_rate=1)
     # print(cost)
