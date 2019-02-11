@@ -18,9 +18,9 @@ svc1.score(data[['X1','X2']],data['y'])
 
 data['SVM1 Confidence'] = svc1.decision_function(data[['X1', 'X2']])
 
-fig,ax= plt.subplots()
-ax.scatter(data["X1"], data['X2'], s=50, c=data['SVM1 Confidence'], cmap='RdBu')
-plt.show()
+# fig,ax= plt.subplots()
+# ax.scatter(data["X1"], data['X2'], s=50, c=data['SVM1 Confidence'], cmap='RdBu')
+# plt.show()
 
 def gaussian_kernel(x1, x2, sigma):
     return np.exp(-np.sum(((x1-x2) ** 2))/(2 * sigma ** 2))
